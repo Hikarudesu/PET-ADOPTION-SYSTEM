@@ -1,3 +1,14 @@
 PET ADOPTION SYSTEM
 
 BY: SANCHEZ, CARL VINCENT T.    BSIT 3-4
+
+BELOW IS THE VIDEO SHOWCASING THE SYSTEM (IT IS DIVIDED IN TWO BECAUSE OF THE LIMIT)
+
+
+https://github.com/user-attachments/assets/85e53284-0053-4db0-8f66-1f1806ba373e
+
+
+
+https://github.com/user-attachments/assets/6c30ebc5-2ef3-4ab3-9a09-234509482191
+
+
