@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+
+{% block title %}User Profiles - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <h1>User Profiles</h1>
+        
+        <div class="profiles-grid">
+            {% for profile in profiles %}
+                <div class="profile-card">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}" class="profile-image">
+                    {% else %}
+                        <div class="profile-image placeholder">👤</div>
+                    {% endif %}
+                    
+                    <h3>{{ profile.user.get_full_name|default:profile.user.username }}</h3>
+                    <p class="profile-location">{{ profile.city }}, {{ profile.state }}</p>
+                    <p class="profile-bio">{{ profile.bio }}</p>
+                    
+                    <a href="{% url 'profile_detail' profile.id %}" class="btn btn-secondary">View Profile</a>
+                </div>
+            {% empty %}
+                <p class="empty-message">No profiles available.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

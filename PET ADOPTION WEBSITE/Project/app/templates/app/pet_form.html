@@ -1,0 +1,41 @@
+{% extends 'app/base.html' %}
+
+{% block title %}{% if form.instance.id %}Edit{{ else }}Add{% endif %} Pet - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <h1>{% if form.instance.id %}Edit {{ form.instance.name }}{% else %}Add New Pet{% endif %}</h1>
+        
+        <div class="form-wrapper">
+            <form method="post" enctype="multipart/form-data" class="form">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-error">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <span class="error">{{ field.errors.0 }}</span>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <small class="help-text">{{ field.help_text }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        {% if form.instance.id %}Save Changes{% else %}Add Pet{% endif %}
+                    </button>
+                    <a href="{% url 'pets' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

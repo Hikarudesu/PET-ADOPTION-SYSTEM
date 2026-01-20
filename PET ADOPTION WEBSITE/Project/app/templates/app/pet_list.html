@@ -1,0 +1,131 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Available Pets - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem; color: #2c3e50; margin-bottom: 10px; font-weight: 700;">Available Pets for Adoption</h1>
+            <p style="font-size: 1.05rem; color: #7f8c8d;">Browse our collection of wonderful pets waiting for their forever homes</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div style="background: white; padding: 30px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <form method="get" id="filterForm">
+                <div style="margin-bottom: 20px;">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        placeholder="Search by name, breed..." 
+                        value="{{ search_query }}"
+                        id="searchInput"
+                        style="width: 100%; padding: 12px 15px; border: 2px solid #ecf0f1; border-radius: 6px; font-size: 1rem; transition: all 0.3s ease;"
+                        onmouseover="this.style.borderColor='#e74c3c'; this.style.boxShadow='0 0 0 3px rgba(231,76,60,0.1)'"
+                        onmouseout="this.style.borderColor='#ecf0f1'; this.style.boxShadow='none'"
+                    >
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <label for="breedFilter" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Breed:</label>
+                        <select name="breed" id="breedFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #ecf0f1; border-radius: 6px; font-size: 0.95rem; background: white; cursor: pointer;">
+                            <option value="">All Breeds</option>
+                            {% for breed in breeds %}
+                                {% if breed %}
+                                    <option value="{{ breed }}">{{ breed }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="genderFilter" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Gender:</label>
+                        <select name="gender" id="genderFilter" style="width: 100%; padding: 10px 12px; border: 2px solid #ecf0f1; border-radius: 6px; font-size: 0.95rem; background: white; cursor: pointer;">
+                            <option value="">All Genders</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; align-items: flex-end;">
+                        <button type="submit" class="btn" style="width: 100%;">Apply Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Count -->
+        <div style="margin-bottom: 30px; color: #7f8c8d;">
+            <p style="font-size: 1.05rem;">Showing <strong style="color: #e74c3c; font-weight: 600;">{{ pets|length }}</strong> pet(s)</p>
+        </div>
+
+        <!-- Pets Grid -->
+        {% if pets %}
+            <div class="pets-grid">
+                {% for pet in pets %}
+                    <div class="pet-card">
+                        <div style="position: relative; overflow: hidden;">
+                            {% if pet.image %}
+                                <img src="{{ pet.image.url }}" alt="{{ pet.name }}" class="pet-image" style="width: 100%; height: 200px; object-fit: cover;">
+                            {% else %}
+                                <div class="pet-image" style="background: linear-gradient(135deg, #ecf0f1 0%, #d5dbdb 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; height: 200px;">📷</div>
+                            {% endif %}
+                            <div style="position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">{{ pet.status|upper }}</div>
+                        </div>
+                        
+                        <div class="pet-info">
+                            <h3 style="font-size: 1.3rem; margin-bottom: 8px; color: #2c3e50; font-weight: 700;">{{ pet.name }}</h3>
+                            <p style="color: #e74c3c; font-weight: 600; margin-bottom: 12px; font-size: 1rem;">{{ pet.breed }}</p>
+                            
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px; font-size: 0.9rem; color: #7f8c8d;">
+                                <span style="background: #ecf0f1; padding: 4px 10px; border-radius: 4px;">📅 {{ pet.age }} yrs</span>
+                                <span style="background: #ecf0f1; padding: 4px 10px; border-radius: 4px;">{{ pet.get_gender_display }}</span>
+                            </div>
+                            
+                            <p style="color: #7f8c8d; font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px;">{{ pet.description|truncatewords:12 }}</p>
+                            
+                            <div style="display: grid; gap: 8px;">
+                                <a href="{% url 'pet_detail' pet.id %}" class="btn" style="text-align: center; width: 100%;">View Details</a>
+                                {% if user.is_staff %}
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="{% url 'pet_update' pet.id %}" class="btn btn-secondary" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 8px 12px;">Edit</a>
+                                        <a href="{% url 'pet_delete' pet.id %}" class="btn" style="flex: 1; text-align: center; background: #e67e22; font-size: 0.85rem; padding: 8px 12px;">Delete</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1&q={{ search_query }}" class="page-link">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}" class="page-link">Previous</a>
+                    {% endif %}
+
+                    <span class="page-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&q={{ search_query }}" class="page-link">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}&q={{ search_query }}" class="page-link">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <p class="empty-message">No pets found matching your criteria.</p>
+                <a href="{% url 'pets' %}" class="btn btn-primary">Clear Filters</a>
+            </div>
+        {% endif %}
+
+        {% if user.is_staff %}
+            <div class="admin-actions">
+                <a href="{% url 'pet_create' %}" class="btn btn-primary">Add New Pet</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

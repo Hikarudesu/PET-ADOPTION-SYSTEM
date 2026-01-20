@@ -1,0 +1,72 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Approve Adoption Request{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 2rem; margin-bottom: 3rem; max-width: 600px;">
+    <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h1 style="color: #28a745; margin-bottom: 1rem;">✅ Approve Adoption Request?</h1>
+        
+        <!-- Pet Info -->
+        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 2rem;">
+            <h3 style="margin: 0 0 1rem 0;">Pet Information</h3>
+            <p style="margin: 0.5rem 0;"><strong>Name:</strong> {{ adoption_request.pet.name }}</p>
+            <p style="margin: 0.5rem 0;"><strong>Breed:</strong> {{ adoption_request.pet.breed }}</p>
+            <p style="margin: 0.5rem 0;"><strong>Category:</strong> {{ adoption_request.pet.category.name }}</p>
+        </div>
+
+        <!-- Applicant Info -->
+        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 2rem;">
+            <h3 style="margin: 0 0 1rem 0;">Applicant Information</h3>
+            <p style="margin: 0.5rem 0;"><strong>Name:</strong> {{ adoption_request.requester.get_full_name|default:adoption_request.requester.username }}</p>
+            <p style="margin: 0.5rem 0;"><strong>Email:</strong> {{ adoption_request.requester.email }}</p>
+            {% if adoption_request.requester.profile.phone %}
+                <p style="margin: 0.5rem 0;"><strong>Phone:</strong> {{ adoption_request.requester.profile.phone }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Info Box -->
+        <div style="padding: 1rem; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; margin-bottom: 2rem;">
+            <strong>✓ By approving:</strong>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                <li>The applicant's request will be marked as APPROVED</li>
+                <li>The pet's status will change to PENDING ADOPTION</li>
+                <li>The applicant will see their approval status</li>
+            </ul>
+        </div>
+
+        <!-- Buttons -->
+        <form method="post" style="display: flex; gap: 1rem;">
+            {% csrf_token %}
+            <button type="submit" style="
+                flex: 1;
+                padding: 0.75rem 1.5rem;
+                background: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background 0.3s;
+            " onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">
+                ✅ Yes, Approve
+            </button>
+            <a href="{% url 'adoption_request_detail' adoption_request.id %}" style="
+                flex: 1;
+                padding: 0.75rem 1.5rem;
+                background: #6c757d;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 1rem;
+                font-weight: bold;
+                text-align: center;
+                transition: background 0.3s;
+            " onmouseover="this.style.background='#5a6268'" onmouseout="this.style.background='#6c757d'">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

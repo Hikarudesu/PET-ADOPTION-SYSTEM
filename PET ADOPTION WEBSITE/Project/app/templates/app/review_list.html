@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Reviews - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <h1>Pet Reviews</h1>
+        
+        <div class="reviews-list">
+            {% for review in reviews %}
+                <div class="review-card">
+                    <div class="review-header">
+                        <h3>{{ review.title }}</h3>
+                        <span class="review-rating">⭐ {{ review.rating }}/5</span>
+                    </div>
+                    <p class="review-pet"><strong>Pet:</strong> <a href="{% url 'pet_detail' review.pet.id %}">{{ review.pet.name }}</a></p>
+                    <p class="review-author">by <strong>{{ review.author.get_full_name|default:review.author.username }}</strong></p>
+                    <p class="review-date">{{ review.created_at|date:"M d, Y" }}</p>
+                    <p class="review-content">{{ review.content }}</p>
+                    
+                    {% if user == review.author or user.is_staff %}
+                        <div class="review-actions">
+                            <a href="{% url 'review_update' review.id %}" class="btn btn-small">Edit</a>
+                            <a href="{% url 'review_delete' review.id %}" class="btn btn-small btn-danger">Delete</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p class="empty-message">No reviews yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

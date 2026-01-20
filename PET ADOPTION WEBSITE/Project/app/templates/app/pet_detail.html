@@ -1,0 +1,160 @@
+{% extends 'app/base.html' %}
+
+{% block title %}{{ pet.name }} - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <a href="{% url 'pets' %}" style="color: #e74c3c; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 20px;">← Back to Pets</a>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+            <!-- Pet Image and Basic Info -->
+            <div>
+                <div style="position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    {% if pet.image %}
+                        <img src="{{ pet.image.url }}" alt="{{ pet.name }}" style="width: 100%; height: auto; display: block;">
+                    {% else %}
+                        <div style="background: linear-gradient(135deg, #ecf0f1 0%, #d5dbdb 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem; height: 400px;">📷</div>
+                    {% endif %}
+                    <div style="position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; padding: 8px 16px; border-radius: 25px; font-weight: 700; font-size: 0.85rem;">{{ pet.status|upper }}</div>
+                </div>
+            </div>
+
+            <div>
+                <h1 style="font-size: 2.5rem; color: #2c3e50; font-weight: 700; margin-bottom: 8px;">{{ pet.name }}</h1>
+                <p style="font-size: 1.3rem; color: #e74c3c; font-weight: 600; margin-bottom: 20px;">{{ pet.breed }}</p>
+                
+                {% if average_rating %}
+                    <div style="background: #fff3cd; padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; color: #856404; font-weight: 600;">
+                        ⭐ {{ average_rating|floatformat:1 }} rating ({{ reviews|length }} reviews)
+                    </div>
+                {% endif %}
+
+                <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 15px;">Pet Information</h3>
+                    <div style="display: grid; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1;">
+                            <span style="font-weight: 600; color: #2c3e50;">Breed:</span>
+                            <span style="color: #7f8c8d;">{{ pet.breed }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1;">
+                            <span style="font-weight: 600; color: #2c3e50;">Age:</span>
+                            <span style="color: #7f8c8d;">{{ pet.age }} years old</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1;">
+                            <span style="font-weight: 600; color: #2c3e50;">Gender:</span>
+                            <span style="color: #7f8c8d;">{{ pet.get_gender_display }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 10px;">
+                            <span style="font-weight: 600; color: #2c3e50;">Arrival Date:</span>
+                            <span style="color: #7f8c8d;">{{ pet.arrival_date|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: grid; gap: 12px;">
+                    {% if user.is_authenticated %}
+                        {% if pet.status == 'available' and not user_adoption_request %}
+                            <a href="{% url 'adoption_request_create' pet_id=pet.id %}" class="btn" style="text-align: center; padding: 15px; font-size: 1.05rem; font-weight: 600;">
+                                Apply for Adoption
+                            </a>
+                        {% elif user_adoption_request %}
+                            <div style="background: #d4edda; border: 2px solid #28a745; padding: 15px; border-radius: 6px;">
+                                <p style="color: #155724; font-weight: 600; margin: 0;">Your Application Status: <span style="color: #28a745;">{{ user_adoption_request.get_status_display }}</span></p>
+                                <a href="{% url 'adoption_request_detail' user_adoption_request.id %}" class="btn btn-secondary" style="margin-top: 10px; display: inline-block;">
+                                    View Application
+                                </a>
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                            {% if not user_review %}
+                                <a href="{% url 'review_create' pet_id=pet.id %}" class="btn btn-secondary">
+                                    Write a Review
+                                </a>
+                            {% endif %}
+
+                            {% if user.is_staff %}
+                                <a href="{% url 'pet_update' pk=pet.id %}" class="btn btn-warning">Edit Pet Info</a>
+                            {% endif %}
+                        {% else %}
+                            <div style="background: #e7f3ff; border: 2px solid #0d6efd; padding: 15px; border-radius: 6px;">
+                                <p style="color: #003f87; margin: 0;">
+                                    <a href="{% url 'login' %}" style="color: #e74c3c; font-weight: 600;">Login</a> or 
+                                    <a href="{% url 'signup' %}" style="color: #e74c3c; font-weight: 600;">Sign up</a> to apply for adoption
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div style="background: white; padding: 30px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 15px;">About {{ pet.name }}</h2>
+            <p style="color: #7f8c8d; line-height: 1.8; font-size: 1rem;">{{ pet.description }}</p>
+            
+            {% if pet.health_status %}
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ecf0f1;">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">Health Information</h3>
+                    <p style="color: #7f8c8d; line-height: 1.8;">{{ pet.health_status }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Reviews Section -->
+        <div style="background: white; padding: 30px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 20px;">Reviews ({{ reviews|length }})</h2>
+            
+            {% if reviews %}
+                <div style="display: grid; gap: 20px;">
+                    {% for review in reviews %}
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <h4 style="color: #2c3e50; font-weight: 700; margin: 0;">{{ review.title }}</h4>
+                                <span style="background: #ffc107; color: #333; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;">⭐ {{ review.rating }}/5</span>
+                            </div>
+                            <p style="color: #7f8c8d; margin: 8px 0; font-size: 0.9rem;">
+                                <strong>{{ review.author.get_full_name|default:review.author.username }}</strong> • {{ review.created_at|date:"M d, Y" }}
+                            </p>
+                            <p style="color: #555; line-height: 1.6; margin-bottom: 12px;">{{ review.content }}</p>
+                            
+                            {% if user.is_authenticated and user == review.author or user.is_staff %}
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                    <a href="{% url 'review_update' review.id %}" class="btn btn-secondary" style="font-size: 0.85rem; padding: 6px 12px;">Edit</a>
+                                    <a href="{% url 'review_delete' review.id %}" class="btn" style="font-size: 0.85rem; padding: 6px 12px; background: #e67e22;">Delete</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #7f8c8d; text-align: center; padding: 30px; background: #f8f9fa; border-radius: 6px;">No reviews yet. Be the first to review!</p>
+            {% endif %}
+        </div>
+
+        <!-- Related Pets Section -->
+        {% if related_pets %}
+            <div style="margin-bottom: 40px;">
+                <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 25px;">Similar Pets</h2>
+                <div class="pets-grid">
+                    {% for related_pet in related_pets %}
+                        <div class="pet-card">
+                            {% if related_pet.image %}
+                                <img src="{{ related_pet.image.url }}" alt="{{ related_pet.name }}" class="pet-image" style="width: 100%; height: 200px; object-fit: cover;">
+                            {% else %}
+                                <div style="background: linear-gradient(135deg, #ecf0f1 0%, #d5dbdb 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem; height: 200px;">📷</div>
+                            {% endif %}
+                            <div class="pet-info">
+                                <h3 style="margin-bottom: 8px; color: #2c3e50; font-weight: 700;">{{ related_pet.name }}</h3>
+                                <p style="color: #e74c3c; font-weight: 600; margin-bottom: 12px;">{{ related_pet.breed }}</p>
+                                <a href="{% url 'pet_detail' related_pet.id %}" class="btn" style="width: 100%; text-align: center;">View Details</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

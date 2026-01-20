@@ -1,0 +1,63 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Adoption Request - {{ adoption_request.pet.name }}{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <a href="{% url 'adoption_requests' %}" class="back-link">← Back to Requests</a>
+        
+        <h1>Adoption Request for {{ adoption_request.pet.name }}</h1>
+        
+        <div class="detail-wrapper">
+            <div class="detail-card">
+                <h2>Pet Information</h2>
+                <p><strong>Name:</strong> {{ adoption_request.pet.name }}</p>
+                <p><strong>Category:</strong> {{ adoption_request.pet.category.name }}</p>
+                <p><strong>Breed:</strong> {{ adoption_request.pet.breed }}</p>
+                <a href="{% url 'pet_detail' adoption_request.pet.id %}" class="btn btn-secondary">View Pet</a>
+            </div>
+
+            <div class="detail-card">
+                <h2>Applicant Information</h2>
+                <p><strong>Name:</strong> {{ adoption_request.requester.get_full_name|default:adoption_request.requester.username }}</p>
+                <p><strong>Email:</strong> {{ adoption_request.requester.email }}</p>
+                {% if adoption_request.requester.profile.phone %}
+                    <p><strong>Phone:</strong> {{ adoption_request.requester.profile.phone }}</p>
+                {% endif %}
+            </div>
+
+            <div class="detail-card">
+                <h2>Application Details</h2>
+                <p><strong>Status:</strong> <span class="status-{{ adoption_request.status }}">{{ adoption_request.get_status_display }}</span></p>
+                <p><strong>Applied:</strong> {{ adoption_request.requested_date|date:"M d, Y H:i" }}</p>
+                <p><strong>Last Updated:</strong> {{ adoption_request.updated_date|date:"M d, Y H:i" }}</p>
+            </div>
+
+            <div class="detail-card">
+                <h2>Motivation</h2>
+                <p>{{ adoption_request.motivation }}</p>
+            </div>
+
+            <div class="detail-card">
+                <h2>Living Situation</h2>
+                <p><strong>Home Type:</strong> {{ adoption_request.home_type }}</p>
+                <p><strong>Has Other Pets:</strong> {{ adoption_request.has_other_pets|yesno:"Yes,No" }}</p>
+                {% if adoption_request.other_pets_description %}
+                    <p><strong>Other Pets:</strong> {{ adoption_request.other_pets_description }}</p>
+                {% endif %}
+            </div>
+
+            <div class="detail-actions">
+                {% if user == adoption_request.requester %}
+                    <a href="{% url 'adoption_request_update' adoption_request.id %}" class="btn btn-warning">Edit Application</a>
+                    <a href="{% url 'adoption_request_delete' adoption_request.id %}" class="btn btn-danger">Delete Application</a>
+                {% endif %}
+                {% if user.is_staff %}
+                    {% if adoption_request.status == 'pending' %}
+                        <a href="{% url 'adoption_request_approve' adoption_request.id %}" class="btn btn-success">Approve</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

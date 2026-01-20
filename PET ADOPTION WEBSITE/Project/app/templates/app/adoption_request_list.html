@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+
+{% block title %}Adoption Requests - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <h1>Adoption Requests</h1>
+        
+        <div class="adoption-requests-list">
+            {% for request in requests %}
+                <div class="request-card">
+                    <div class="request-header">
+                        <h3>{{ request.pet.name }}</h3>
+                        <span class="status-badge status-{{ request.status }}">{{ request.get_status_display }}</span>
+                    </div>
+                    <p><strong>Applicant:</strong> {{ request.requester.get_full_name|default:request.requester.username }}</p>
+                    <p><strong>Pet Category:</strong> {{ request.pet.category.name }}</p>
+                    <p><strong>Applied:</strong> {{ request.requested_date|date:"M d, Y H:i" }}</p>
+                    <p><strong>Home Type:</strong> {{ request.home_type }}</p>
+                    <p><strong>Has Other Pets:</strong> {{ request.has_other_pets|yesno:"Yes,No" }}</p>
+                    
+                    <div class="request-actions">
+                        <a href="{% url 'adoption_request_detail' request.id %}" class="btn btn-secondary">View Details</a>
+                        {% if user == request.requester %}
+                            <a href="{% url 'adoption_request_update' request.id %}" class="btn btn-small">Edit</a>
+                            <a href="{% url 'adoption_request_delete' request.id %}" class="btn btn-small btn-danger">Delete</a>
+                        {% endif %}
+                        {% if user.is_staff and request.status == 'pending' %}
+                            <a href="{% url 'adoption_request_approve' request.id %}" class="btn btn-success">Approve</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="empty-message">No adoption requests yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

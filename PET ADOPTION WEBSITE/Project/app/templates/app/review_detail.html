@@ -1,0 +1,31 @@
+{% extends 'app/base.html' %}
+
+{% block title %}{{ review.title }} - Review - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <a href="{% url 'pet_detail' review.pet.id %}" class="back-link">← Back to {{ review.pet.name }}</a>
+        
+        <div class="review-detail">
+            <h1>{{ review.title }}</h1>
+            
+            <div class="review-meta">
+                <p><strong>Pet:</strong> <a href="{% url 'pet_detail' review.pet.id %}">{{ review.pet.name }}</a></p>
+                <p><strong>Reviewer:</strong> {{ review.author.get_full_name|default:review.author.username }}</p>
+                <p><strong>Rating:</strong> <span class="review-rating">⭐ {{ review.rating }}/5</span></p>
+                <p><strong>Date:</strong> {{ review.created_at|date:"M d, Y H:i" }}</p>
+            </div>
+
+            <div class="review-content">
+                {{ review.content }}
+            </div>
+
+            {% if user == review.author or user.is_staff %}
+                <div class="detail-actions">
+                    <a href="{% url 'review_update' review.id %}" class="btn btn-warning">Edit Review</a>
+                    <a href="{% url 'review_delete' review.id %}" class="btn btn-danger">Delete Review</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

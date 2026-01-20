@@ -1,0 +1,95 @@
+{% extends 'app/base.html' %}
+
+{% block title %}About Us - PetAdopt{% endblock %}
+
+{% block content %}
+    <div class="container page-content">
+        <div style="text-align: center; margin-bottom: 50px;">
+            <h1 style="font-size: 2.8rem; color: #2c3e50; font-weight: 700; margin-bottom: 10px;">About PetAdopt</h1>
+            <p style="font-size: 1.1rem; color: #7f8c8d;">Your trusted partner in finding forever homes for pets in need</p>
+        </div>
+        
+        <!-- Mission Section -->
+        <div style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white; padding: 50px; border-radius: 8px; margin-bottom: 40px; text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 15px; font-weight: 700;">Our Mission</h2>
+            <p style="font-size: 1.05rem; line-height: 1.8; max-width: 600px; margin: 0 auto;">
+                PetAdopt is a nonprofit organization dedicated to finding loving, permanent homes for animals in need. 
+                We believe that every pet deserves a chance to live a happy, healthy life with a caring family.
+            </p>
+        </div>
+
+        <!-- Who We Are Section -->
+        <div style="background: white; padding: 40px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h2 style="font-size: 2rem; color: #2c3e50; font-weight: 700; margin-bottom: 20px;">Who We Are</h2>
+            <p style="color: #7f8c8d; line-height: 1.8; font-size: 1.05rem;">
+                Founded in 2024, PetAdopt has helped thousands of animals find their forever homes. 
+                Our team of dedicated volunteers and staff work tirelessly to ensure each pet receives proper care, 
+                medical attention, and love until they find their perfect match.
+            </p>
+        </div>
+
+        <!-- Values Section -->
+        <div style="margin-bottom: 40px;">
+            <h2 style="font-size: 2rem; color: #2c3e50; font-weight: 700; margin-bottom: 25px; text-align: center;">Our Core Values</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px;">
+                <div style="background: white; padding: 30px; border-radius: 8px; border-left: 4px solid #e74c3c; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">❤️ Compassion</h3>
+                    <p style="color: #7f8c8d; line-height: 1.6;">We care deeply about animal welfare and wellbeing</p>
+                </div>
+                <div style="background: white; padding: 30px; border-radius: 8px; border-left: 4px solid #e74c3c; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">✨ Integrity</h3>
+                    <p style="color: #7f8c8d; line-height: 1.6;">We operate with honesty and transparency in all our work</p>
+                </div>
+                <div style="background: white; padding: 30px; border-radius: 8px; border-left: 4px solid #e74c3c; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">🎯 Excellence</h3>
+                    <p style="color: #7f8c8d; line-height: 1.6;">We strive for the highest standards in pet care</p>
+                </div>
+                <div style="background: white; padding: 30px; border-radius: 8px; border-left: 4px solid #e74c3c; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">🤝 Community</h3>
+                    <p style="color: #7f8c8d; line-height: 1.6;">We believe in the power of community support</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div style="background: white; padding: 40px; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h2 style="font-size: 2rem; color: #2c3e50; font-weight: 700; margin-bottom: 25px;">What We Do</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 15px 0; border-bottom: 1px solid #ecf0f1; color: #7f8c8d; line-height: 1.6;">
+                    <span style="color: #e74c3c; font-weight: 600; margin-right: 10px;">✓</span> Rescue and rehabilitation of abandoned and neglected pets
+                </li>
+                <li style="padding: 15px 0; border-bottom: 1px solid #ecf0f1; color: #7f8c8d; line-height: 1.6;">
+                    <span style="color: #e74c3c; font-weight: 600; margin-right: 10px;">✓</span> Medical care and vaccinations
+                </li>
+                <li style="padding: 15px 0; border-bottom: 1px solid #ecf0f1; color: #7f8c8d; line-height: 1.6;">
+                    <span style="color: #e74c3c; font-weight: 600; margin-right: 10px;">✓</span> Behavioral assessment and training
+                </li>
+                <li style="padding: 15px 0; border-bottom: 1px solid #ecf0f1; color: #7f8c8d; line-height: 1.6;">
+                    <span style="color: #e74c3c; font-weight: 600; margin-right: 10px;">✓</span> Matchmaking between pets and adoptive families
+                </li>
+                <li style="padding: 15px 0; color: #7f8c8d; line-height: 1.6;">
+                    <span style="color: #e74c3c; font-weight: 600; margin-right: 10px;">✓</span> Post-adoption support and guidance
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contact Section -->
+        <div style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 50px; border-radius: 8px; text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 25px; font-weight: 700;">Get In Touch</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px;">
+                <div>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 5px;">Email</p>
+                    <a href="mailto:PetAdopt@gmail.com" style="color: #e74c3c; font-weight: 600; text-decoration: none;">PetAdopt@gmail.com</a>
+                </div>
+                <div>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 5px;">Phone</p>
+                    <p style="color: #ecf0f1; font-weight: 600; margin: 0;">09911734598</p>
+                </div>
+                <div>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 5px;">Hours</p>
+                    <p style="color: #ecf0f1; font-weight: 600; margin: 0;">Mon - Fri, 9 AM - 6 PM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
